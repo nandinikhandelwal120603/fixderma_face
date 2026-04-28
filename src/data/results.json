@@ -1,0 +1,141 @@
+[
+  {
+    "timestamp": "2026-04-28T14:35:45.238Z",
+    "analysisResult": {
+      "conditions": [
+        {
+          "name": "dark_patches",
+          "confidence": 0.88,
+          "severity": "moderate"
+        }
+      ],
+      "skin_type": "normal",
+      "notes": "Visible dark patches primarily under the eyes."
+    },
+    "finalResponse": {
+      "conditions": [
+        {
+          "name": "dark_patches",
+          "confidence": 0.88,
+          "severity": "moderate",
+          "education": {
+            "what": "Thickened, darker skin patches (Acanthosis Nigricans)",
+            "why": "Insulin resistance or friction.",
+            "severity_note": "Gentle exfoliation helps improve appearance."
+          }
+        }
+      ],
+      "skin_type": "normal",
+      "notes": "Visible dark patches primarily under the eyes.",
+      "recommended_products": [
+        {
+          "id": "d1a34b22-8d7a-4c91-9e7b-c4f4a3e9c2b1",
+          "name": "Nigrifix Cream",
+          "category": "Body Care",
+          "concerns": [
+            "pigmentation",
+            "dark_patches",
+            "acanthosis_nigricans"
+          ],
+          "ingredients": [
+            "Retinol",
+            "Lactic Acid",
+            "Tea Tree Oil"
+          ],
+          "description": "Customized formulation for Acanthosis Nigricans. Helps to clear the darkness and hardness related to certain body parts like neck, nape, thighs, elbows.",
+          "price": 600,
+          "image_url": "https://cdn.shopify.com/s/files/1/0616/6197/0681/products/nigrifix-cream-50g.jpg?v=1646048184",
+          "buy_link": "https://www.fixderma.com/products/nigrifix-cream",
+          "usage": "Apply on affected areas twice daily."
+        }
+      ],
+      "coupon": "FIX10"
+    }
+  },
+  {
+    "timestamp": "2026-04-28T14:41:07.170Z",
+    "analysisResult": {
+      "conditions": [
+        {
+          "name": "dark_patches",
+          "confidence": 0.9,
+          "severity": "moderate"
+        },
+        {
+          "name": "pigmentation",
+          "confidence": 0.7,
+          "severity": "mild"
+        }
+      ],
+      "skin_type": "normal",
+      "notes": "Visible dark patches under the eyes. Overall skin tone shows mild pigmentation."
+    },
+    "finalResponse": {
+      "conditions": [
+        {
+          "name": "dark_patches",
+          "confidence": 0.9,
+          "severity": "moderate",
+          "education": {
+            "what": "Thickened, darker skin patches (Acanthosis Nigricans)",
+            "why": "Insulin resistance or friction.",
+            "severity_note": "Gentle exfoliation helps improve appearance."
+          }
+        },
+        {
+          "name": "pigmentation",
+          "confidence": 0.7,
+          "severity": "mild",
+          "education": {
+            "what": "Darker patches of skin",
+            "why": "Excess melanin production, often triggered by sun exposure or hormones.",
+            "severity_note": "Sun protection is crucial for managing pigmentation."
+          }
+        }
+      ],
+      "skin_type": "normal",
+      "notes": "Visible dark patches under the eyes. Overall skin tone shows mild pigmentation.",
+      "recommended_products": [
+        {
+          "id": "d1a34b22-8d7a-4c91-9e7b-c4f4a3e9c2b1",
+          "name": "Nigrifix Cream",
+          "category": "Body Care",
+          "concerns": [
+            "pigmentation",
+            "dark_patches",
+            "acanthosis_nigricans"
+          ],
+          "ingredients": [
+            "Retinol",
+            "Lactic Acid",
+            "Tea Tree Oil"
+          ],
+          "description": "Customized formulation for Acanthosis Nigricans. Helps to clear the darkness and hardness related to certain body parts like neck, nape, thighs, elbows.",
+          "price": 600,
+          "image_url": "https://cdn.shopify.com/s/files/1/0616/6197/0681/products/nigrifix-cream-50g.jpg?v=1646048184",
+          "buy_link": "https://www.fixderma.com/products/nigrifix-cream",
+          "usage": "Apply on affected areas twice daily."
+        },
+        {
+          "id": "d3a34b22-8d7a-4c91-9e7b-c4f4a3e9c2b3",
+          "name": "Skarfix-TX Cream",
+          "category": "Face Care",
+          "concerns": [
+            "pigmentation",
+            "melasma"
+          ],
+          "ingredients": [
+            "Tranexamic Acid",
+            "Alpha Arbutin"
+          ],
+          "description": "Advanced formulation for melasma and hyperpigmentation. Promotes even skin tone.",
+          "price": 550,
+          "image_url": "https://cdn.shopify.com/s/files/1/0616/6197/0681/products/Skarfix-TX-Cream-1.jpg?v=1646048206",
+          "buy_link": "https://www.fixderma.com/products/skarfix-tx-cream",
+          "usage": "Apply gently on the affected area."
+        }
+      ],
+      "coupon": "FIX15"
+    }
+  }
+]
