@@ -25,7 +25,7 @@ create table if not exists scans (
 -- 3. Raw AI Logs (For fine-tuning and debugging)
 create table if not exists raw_ai_logs (
   id uuid primary key default uuid_generate_v4(),
-  user_id uuid, -- nullable for guest scans
+  user_id uuid references users(id) on delete set null, -- linked to user
   raw_response text not null,
   cleaned_response jsonb,
   model_name text default 'gemini-2.5-flash',
