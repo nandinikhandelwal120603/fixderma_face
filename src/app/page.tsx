@@ -4,13 +4,12 @@ import { useState } from 'react';
 import CameraCapture from '@/components/CameraCapture';
 import { Loader2, AlertTriangle, Info, ChevronRight, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
-
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key';
+
+export const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 type AppStep = 'profile' | 'capture' | 'analyzing' | 'results';
 
