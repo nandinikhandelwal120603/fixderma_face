@@ -90,6 +90,7 @@ OUTPUT FORMAT:
   "notes": "string"
 }`;
 
+    const startTime = Date.now();
     const result = await model.generateContent([
       {
         text: SYSTEM_PROMPT
@@ -102,6 +103,10 @@ OUTPUT FORMAT:
       },
     ]);
 
+    const endTime = Date.now();
+    const latencyMs = endTime - startTime;
+    const tokensUsed = result.response.usageMetadata?.totalTokenCount || 0;
+
     const responseText = result.response.text();
     const cleaned = cleanJSON(responseText);
 
@@ -110,7 +115,9 @@ OUTPUT FORMAT:
       supabaseServer.from('raw_ai_logs').insert({
         user_id: userId,
         raw_response: responseText,
-        cleaned_response: JSON.parse(cleaned)
+        cleaned_response: JSON.parse(cleaned),
+        tokens_used: tokensUsed,
+        latency_ms: latencyMs
       }).then(({ error }) => {
         if (error) console.error('Supabase log failed', error);
       });

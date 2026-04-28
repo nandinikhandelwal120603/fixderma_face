@@ -29,6 +29,8 @@ create table if not exists raw_ai_logs (
   raw_response text not null,
   cleaned_response jsonb,
   model_name text default 'gemini-2.5-flash',
+  tokens_used integer,
+  latency_ms integer,
   created_at timestamp with time zone default now()
 );
 
