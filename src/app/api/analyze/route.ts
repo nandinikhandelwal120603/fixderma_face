@@ -111,7 +111,9 @@ OUTPUT FORMAT:
         user_id: userId,
         raw_response: responseText,
         cleaned_response: JSON.parse(cleaned)
-      }).catch(e => console.error('Supabase log failed', e));
+      }).then(({ error }) => {
+        if (error) console.error('Supabase log failed', error);
+      });
     });
 
     let parsed;

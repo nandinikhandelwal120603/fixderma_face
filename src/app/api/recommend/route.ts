@@ -128,7 +128,9 @@ export async function POST(req: Request) {
           conditions: finalResponse.conditions,
           products: finalResponse.recommended_products,
           skin_type: finalResponse.skin_type
-        }).catch(e => console.error('Supabase scan log failed', e));
+        }).then(({ error }) => {
+          if (error) console.error('Supabase scan log failed', error);
+        });
       });
     }
 
