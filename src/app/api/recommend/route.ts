@@ -60,11 +60,21 @@ export async function POST(req: Request) {
     const localData = await getLocalData();
     const { products, mappings } = localData;
 
-    // Map conditions to products
-    const conditionNames = filteredConditions.map((c: any) => c.name);
-    const productIds = mappings
-      .filter((m: any) => conditionNames.includes(m.condition))
-      .flatMap((m: any) => m.product_ids);
+    // Map conditions to products (severity-aware matching)
+    const productIds: string[] = [];
+    for (const condition of filteredConditions) {
+      // First try exact match (condition + severity)
+      let match = mappings.find(
+        (m: any) => m.condition === condition.name && m.severity === condition.severity
+      );
+      // Fallback to just condition name
+      if (!match) {
+        match = mappings.find((m: any) => m.condition === condition.name);
+      }
+      if (match) {
+        productIds.push(...match.product_ids);
+      }
+    }
     
     const uniqueProductIds = Array.from(new Set(productIds));
     const recommendedProducts = products.filter((p: any) => uniqueProductIds.includes(p.id));

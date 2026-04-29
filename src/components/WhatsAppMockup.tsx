@@ -194,25 +194,54 @@ export default function WhatsAppMockup() {
                       </div>
                     )}
                     {msg.type === "product" && msg.product && (
-                      <div className="bg-white rounded border border-gray-100 overflow-hidden w-56">
+                      <div className="bg-white rounded border border-gray-100 overflow-hidden w-64">
                         <div className="text-[14px] text-gray-800 p-2 mb-1 bg-gray-50/50">{msg.content}</div>
-                        <div className="relative w-full h-40 bg-gray-50">
+                        <div className="relative w-full h-36 bg-gray-50">
                           {msg.product.image_url ? (
                             <Image src={msg.product.image_url} alt={msg.product.name} fill className="object-contain p-2" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400">No image</div>
                           )}
                         </div>
-                        <div className="p-3">
-                          <h4 className="font-semibold text-sm line-clamp-2 leading-tight mb-1 text-gray-800">{msg.product.name}</h4>
-                          <div className="text-[#008069] font-bold text-sm mb-3">₹{msg.product.price}</div>
+                        <div className="p-3 space-y-2">
+                          <h4 className="font-semibold text-sm line-clamp-2 leading-tight text-gray-800">{msg.product.name}</h4>
+                          {msg.product.category && (
+                            <span className="inline-block text-[10px] bg-[#e8f5e9] text-[#2e7d32] px-2 py-0.5 rounded-full font-medium">{msg.product.category}</span>
+                          )}
+                          <div className="text-[#008069] font-bold text-base">₹{msg.product.price}</div>
+                          
+                          {msg.product.ingredients && msg.product.ingredients.length > 0 && (
+                            <div>
+                              <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-0.5">Key Ingredients</div>
+                              <div className="flex flex-wrap gap-1">
+                                {msg.product.ingredients.slice(0, 4).map((ing: string, i: number) => (
+                                  <span key={i} className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">{ing}</span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {msg.product.usage && (
+                            <div>
+                              <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-0.5">How to Use</div>
+                              <p className="text-[11px] text-gray-600 leading-snug">{msg.product.usage}</p>
+                            </div>
+                          )}
+
+                          {msg.product.expected_results_timeline && (
+                            <div>
+                              <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-0.5">Expected Results</div>
+                              <p className="text-[11px] text-gray-600 leading-snug">{msg.product.expected_results_timeline}</p>
+                            </div>
+                          )}
+
                           <a
                             href={`${msg.product.buy_link}?UTM_SOURCE=whatsapp_mock`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block w-full bg-[#008069] text-white text-center py-2 rounded text-sm font-medium hover:bg-[#006653] transition-colors"
+                            className="block w-full bg-[#008069] text-white text-center py-2 rounded text-sm font-medium hover:bg-[#006653] transition-colors mt-2"
                           >
-                            Buy Now
+                            Buy Now →
                           </a>
                         </div>
                       </div>
