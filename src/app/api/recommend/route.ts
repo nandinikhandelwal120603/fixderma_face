@@ -1,35 +1,54 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { supabaseServer } from '@/lib/supabaseServer';
 
-// Path to our local data files
-const PRODUCTS_FILE = path.join(process.cwd(), 'src/data/products.json');
-const RESULTS_FILE = path.join(process.cwd(), 'src/data/results.json');
-
+// Local fallback for development (when Supabase env vars aren't set)
 async function getLocalData() {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  const PRODUCTS_FILE = path.join(process.cwd(), 'src/data/products.json');
   const data = await fs.readFile(PRODUCTS_FILE, 'utf8');
   return JSON.parse(data);
 }
 
-async function saveResult(result: any) {
-  try {
-    let results = [];
-    try {
-      const existingData = await fs.readFile(RESULTS_FILE, 'utf8');
-      results = JSON.parse(existingData);
-    } catch (e) {
-      // File doesn't exist yet
-    }
-    
-    results.push({
-      timestamp: new Date().toISOString(),
-      ...result
-    });
-    
-    await fs.writeFile(RESULTS_FILE, JSON.stringify(results, null, 2));
-  } catch (error) {
-    console.error('Failed to save result locally:', error);
+async function getSupabaseData() {
+  // Fetch products from product_catalogue
+  const { data: products, error: productsError } = await supabaseServer
+    .from('product_catalogue')
+    .select('*');
+
+  if (productsError) {
+    console.error('Supabase product_catalogue fetch error:', productsError);
+    throw productsError;
   }
+
+  // Fetch condition-product mappings
+  const { data: mappings, error: mappingsError } = await supabaseServer
+    .from('condition_product_map')
+    .select('*');
+
+  if (mappingsError) {
+    console.error('Supabase condition_product_map fetch error:', mappingsError);
+    throw mappingsError;
+  }
+
+  return { products: products || [], mappings: mappings || [] };
+}
+
+async function getData() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  // Use Supabase if configured, otherwise fall back to local JSON
+  if (supabaseUrl && supabaseKey && !supabaseUrl.includes('placeholder')) {
+    try {
+      return await getSupabaseData();
+    } catch (err) {
+      console.warn('Supabase fetch failed, falling back to local JSON:', err);
+      return await getLocalData();
+    }
+  }
+
+  return await getLocalData();
 }
 
 export async function POST(req: Request) {
@@ -46,19 +65,15 @@ export async function POST(req: Request) {
       .sort((a: any, b: any) => b.confidence - a.confidence);
 
     if (filteredConditions.length === 0) {
-      const response = {
+      return NextResponse.json({
         message: "No clear skin condition detected. Try better lighting.",
         conditions: [],
         recommended_products: []
-      };
-      // Log empty results too
-      await saveResult({ analysisResult, finalResponse: response });
-      return NextResponse.json(response);
+      });
     }
 
-    // Get local data
-    const localData = await getLocalData();
-    const { products, mappings } = localData;
+    // Get data from Supabase (production) or local JSON (dev fallback)
+    const { products, mappings } = await getData();
 
     // Map conditions to products (severity-aware matching)
     const productIds: string[] = [];
@@ -72,7 +87,14 @@ export async function POST(req: Request) {
         match = mappings.find((m: any) => m.condition === condition.name);
       }
       if (match) {
-        productIds.push(...match.product_ids);
+        // Handle both formats:
+        // - Local JSON: product_ids is already a string[]
+        // - Supabase text column: product_ids is a string like '{"id1","id2"}'
+        let ids = match.product_ids || [];
+        if (typeof ids === 'string') {
+          ids = ids.replace(/^\{|\}$/g, '').split(',').map((s: string) => s.trim().replace(/"/g, '')).filter(Boolean);
+        }
+        productIds.push(...ids);
       }
     }
     
@@ -117,7 +139,7 @@ export async function POST(req: Request) {
       }
     }));
 
-    const cartValue = recommendedProducts.reduce((sum: number, p: any) => sum + p.price, 0);
+    const cartValue = recommendedProducts.reduce((sum: number, p: any) => sum + (p.price || 0), 0);
     let coupon = "FIX5";
     if (cartValue > 1000) coupon = "FIX15";
     else if (cartValue > 500) coupon = "FIX10";
@@ -130,17 +152,15 @@ export async function POST(req: Request) {
       coupon: coupon
     };
 
-    // Phase 2: Log to Supabase (Background)
+    // Log to Supabase (Background)
     if (userId) {
-      import('@/lib/supabaseServer').then(({ supabaseServer }) => {
-        supabaseServer.from('scans').insert({
-          user_id: userId,
-          conditions: finalResponse.conditions,
-          products: finalResponse.recommended_products,
-          skin_type: finalResponse.skin_type
-        }).then(({ error }) => {
-          if (error) console.error('Supabase scan log failed', error);
-        });
+      supabaseServer.from('scans').insert({
+        user_id: userId,
+        conditions: finalResponse.conditions,
+        products: finalResponse.recommended_products,
+        skin_type: finalResponse.skin_type
+      }).then(({ error }) => {
+        if (error) console.error('Supabase scan log failed', error);
       });
     }
 
