@@ -14,7 +14,7 @@ const SkinSchema = z.object({
         "aging",
         "dryness",
         "oiliness",
-        "sun_protection",
+        "sun_damage",
       ]),
       confidence: z.number().min(0).max(1),
       severity: z.enum(["mild", "moderate", "severe"]),
@@ -66,7 +66,7 @@ TASK:
 Analyze the face image and detect visible skin conditions.
 
 ALLOWED CONDITIONS ONLY:
-["acne", "pigmentation", "melasma", "open_pores", "dark_patches", "aging", "dryness", "oiliness", "sun_protection"]
+["acne", "pigmentation", "melasma", "open_pores", "dark_patches", "aging", "dryness", "oiliness", "sun_damage"]
 
 RULES:
 - Output ONLY valid JSON

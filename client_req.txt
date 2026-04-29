@@ -1,0 +1,228 @@
+PROJECT B: FIXDERMA — AI SKIN
+DIAGNOSTIC &amp; PRODUCT
+RECOMMENDER
+B1. CLIENT CONTEXT
+Brand: Fixderma India Pvt. Ltd. A dermatologist-backed, science-driven skincare and
+dermaceutical brand. Headquartered at 101-104, 1st Floor, Vipul Plaza, Suncity, Golf Course
+Rd, Sec-54, Gurugram 122011, India. Founded by Shaily Mehrotra. Present in 32+ countries.
+Positioned as dermaceutical — not cosmetic. All products are clinically tested, dermatologist-
+recommended, and backed by scientific formulations. Support email:
+support@fixderma.com. Phone: +91 9999979839.
+Website: https://www.fixderma.com/
+Existing App: Available on Google Play and Apple App Store (launched approximately
+September 2024, app ID: com.fixderma). Already has a basic “Face Analysis” page on the
+website and an “APP Face Analysis” feature — but it appears to be a basic questionnaire-to-
+product-recommendation flow rather than a true AI-powered visual diagnostic. Our project is
+meant to leapfrog this.
+Product Categories (comprehensive from their navigation and collections):
+Face Care: Face Wash, Face Serum, Sunscreen, Moisturizer, Lip Care. Body Care: Sunscreen,
+Body Wash, Body Spray, Cream, Lotion, Gel, Underarm Roll On. Hair Care: Shampoo,
+Conditioner, Serum, Lotion. Sunscreen (dedicated range): Cream, Gel, Lotion, Spray, Kids.
+Specialty: Foot Care, Baby Care (Hoopoe line), Acne Care (Salyzap range), Eye Care,
+Combo Kits, Gifting Kits, Exfoliators, and an Rx Range (prescription-strength products).
+Concern-Based Collections (this is critical for our condition-to-product mapping): Anti-
+Ageing, Hair Problems, Hyperpigmentation &amp; Melasma, Dry Skin, Oily Skin, Acne, Mom &amp;
+Baby Care, Cracked Heels, Scars &amp; Stretch Marks, Open Pores, Sensitive Skin, Vitiligo,
+Pregnancy Care.
+Key Active Ingredients Featured Across Products: Salicylic Acid, Tranexamic Acid,
+Mandelic Acid, Niacinamide, Azelaic Acid, Retinol, Cica, Hyaluronic Acid, Lactic Acid,
+Kojic Acid, Vitamin C, Keratin.
+Top-Selling / Hero Products (based on site prominence): Nigrifix Cream (for Acanthosis
+Nigricans — dark patches on neck/underarms/knuckles — this is their breakout hero
+product), Skarfix-TX Cream (melasma treatment with Tranexamic Acid, Kojic Acid, Alpha
+Arbutin), Foobetik Foot Cream (cracked heels), Pore Minimizer Face Serum (Hyaluronic
+Acid for open pores), Salyzap Salicylic Acid Face Wash (acne), Salyzap Body Wash (body
+acne), Under Eye Roll-On Cream, Shadow SPF 50+ Gel Sunscreen, Shadow SPF 30+ Gel
+Sunscreen, Skarfix-TX De-Pigmentation Face Serum, Pigment Correcting Face Serum
+(Tranexamic Acid), Skarfix-Plus Scar Removal Cream, Nigrifix Underarm Lightening Roll
+
+On, 17% Vitamin C Face Serum, Reticuram Serum (Retinol), Age Reverse Serum
+(Hyaluronic Acid + anti-ageing), Strallium Stretch Marks Cream, Kelocepa Silicone Gel
+(scar treatment), Kairfoll Anti Hair Loss Shampoo, Salyzap Day Time Gel, Salyzap Night-
+time Lotion, Shadow Sunscreen A-Gel SPF 30, C Enhance-25 Serum, Face 21 Cream
+(moisturizer for dry skin), Moisturizing Lotion.
+Pricing Model: Fixderma runs regular discount offers — “Buy 1 Get 5% (code FIX5), Buy 2
+Get 10% (code FIX10%), Buy 3 Get 15% (code FIX15%).” Products are mid-range pricing
+(₹200–₹800 range for most items).
+Brand Certifications: The website references multiple certifications (cruelty-free,
+dermatologically tested, etc.) and a CSR initiative called “Fix My Life Foundation” focused
+on adult education.
+Why this project matters: Fixderma already has a basic face analysis feature but it doesn’t
+use real computer vision. Upgrading to a true AI visual diagnostic positions them as the most
+tech-forward dermaceutical brand in India, dramatically improves the product
+recommendation accuracy and user experience, and drives direct conversion from “problem
+identified” to “product added to cart.”
+B2. WHAT WE ARE BUILDING
+An AI-powered Visual Skin Diagnostic and Product Recommendation Engine that does
+the following in one seamless flow:
+User clicks/uploads a photo of their skin concern → AI identifies the exact condition →
+Explains what it is and why it occurs → Recommends the precise Fixderma product(s)
+from their live catalog → Tells the user how to use the product, what results to expect,
+and realistic timelines → Provides a direct “Buy Now” link to fixderma.com.
+This can be deployed across multiple surfaces (discuss priority with client): a web widget
+embeddable on fixderma.com (replacing/upgrading their current Face Analysis page), a
+feature within their existing mobile app, and/or a WhatsApp bot for maximum reach in
+India. Our recommendation is to build the web widget first (fastest to deploy, works on all
+devices) and the WhatsApp flow second (highest reach in Tier 2/3 India).
+B3. THE USER JOURNEY — DETAILED FLOW
+Step 1 — Capture: User opens the tool. They see a clean, clinical interface with a prominent
+camera icon and the headline: “Show us your skin concern.” Two options: take a live photo
+using the device camera, or upload an existing image from gallery. Guidance text appears:
+“For best results: use natural lighting, hold the camera 6–8 inches from the area, avoid filters
+or makeup on the affected area, ensure the image is focused and clear.” Allow the user to
+crop/frame the specific area of concern before submitting.
+Step 2 — AI Analysis (the brain): The image is sent to a vision AI model. The model
+performs multi-label skin condition classification. It must be trained/prompted to identify the
+following conditions:
+
+Acne (with severity grading: mild — a few whiteheads/blackheads; moderate — papules and
+pustules; severe — nodules and cysts). Hyperpigmentation and dark spots. Melasma
+(specifically — hormonal pigmentation, typically butterfly pattern on cheeks). Acanthosis
+Nigricans (darkened, velvety patches on neck, underarms, elbows, knuckles — this is critical
+because Nigrifix is their hero product). Dark circles under eyes. Open/enlarged pores.
+Dry/flaky skin (including xerosis). Oily/shiny skin. Scars (acne scars, post-inflammatory
+marks, surgical scars). Stretch marks. Cracked heels. Signs of ageing (fine lines, wrinkles,
+loss of elasticity, sagging). Sunburn / sun damage. Rosacea / redness / sensitive skin. Eczema
+/ dermatitis (general identification). Vitiligo (white/depigmented patches). Dandruff / scalp
+flaking (if scalp image submitted). Hair thinning / hair fall pattern (if scalp image submitted).
+The model should output a structured response: primary condition identified (highest
+confidence), secondary conditions (if any), confidence score for each, severity assessment
+(mild/moderate/severe where applicable).
+Step 3 — Condition Explanation (Educational Layer): Once identified, the app presents a
+clear, jargon-free explanation organized into three sections:
+“What is it” — A 2–3 sentence description of the condition in everyday language. Example
+for Acanthosis Nigricans: “This is a skin condition where certain areas — often the neck,
+underarms, or body folds — develop darker, thicker, velvety patches. It’s very common and
+not harmful, but it can be a sign that your skin needs targeted care.”
+“Why does it happen” — Common causes relevant to the condition. Example: “Acanthosis
+Nigricans is often linked to insulin resistance, hormonal changes, obesity, or friction in skin
+folds. It’s especially common in people with PCOS or prediabetic conditions.”
+“How serious is it” — Either reassurance (“This is a cosmetic concern that responds well to
+topical treatment”) or a flag to consult a dermatologist (“Based on what we see, we
+recommend consulting a dermatologist for a clinical evaluation alongside using skincare
+products”).
+Step 4 — Product Recommendation (The Conversion Engine): Based on the identified
+condition, the system maps to the exact Fixderma product(s). This mapping is NOT generated
+freely by the LLM — it is driven by a structured Condition → Product Mapping Table that
+we build and maintain from Fixderma’s catalog data. The LLM identifies the condition; a
+deterministic lookup returns the products. This prevents hallucinated product names or
+incorrect recommendations.
+Here is the initial mapping table (to be validated with Fixderma’s product team before
+launch):
+Acanthosis Nigricans → Nigrifix Cream (50g or 100g) + Nigrifix Underarm Lightening
+Roll On.
+Acne (Face, Mild-Moderate) → Salyzap Salicylic Acid Face Wash + Salyzap Day Time Gel
++ Salyzap Night-time Lotion.
+Acne (Body) → Salyzap Body Wash + Salyzap-AZ Body Spray + Salyzap Spray for Body
+Acne.
+Acne (Full Kit) → Body Acne Kit (Salicylic Acid + Tea Tree Oil bundle).
+
+Melasma / Hyperpigmentation → Skarfix-TX Cream + Skarfix-TX Face Serum + Pigment
+Correcting Face Serum (Tranexamic Acid).
+Dark Spots / Uneven Tone → 17% Vitamin C Face Serum + C Enhance-25 Serum +
+Shadow SPF 50+ Sunscreen (sun protection to prevent recurrence).
+Open Pores → Pore Minimizer Face Serum (Hyaluronic Acid) + Salicylic Acid Face Wash.
+Dark Circles → Under Eye Roll-On Cream.
+Dry Skin → Face 21 Cream + Moisturizing Lotion.
+Oily Skin → Shadow SPF 30+ Gel Sunscreen + Salicylic Acid Face Wash.
+Cracked Heels → Foobetik Foot Cream + Foot Cream for Cracked Heels.
+Scars (Acne / Post-Inflammatory) → Skarfix-Plus Scar Removal Cream + Scar Gel for
+Scars.
+Scars (Keloid / Surgical) → Kelocepa Silicone Gel.
+Stretch Marks → Strallium Stretch Marks Cream.
+Ageing / Wrinkles → Age Reverse Serum + Reticuram Serum (Retinol).
+Sun Damage → Shadow SPF 50+ Cream + 17% Vitamin C Face Serum.
+Sensitive Skin / Redness → Face 21 Cream (gentle moisturizer) + Shadow SPF 50+ Cream.
+Hair Fall / Thinning → Kairfoll Anti Hair Loss Shampoo + Kairfoll Hair Serum + Kairfoll
+Hair Lotion.
+Vitiligo → Direct from Fixderma’s Vitiligo collection (refer to website for current SKUs) +
+strong disclaimer to see a dermatologist.
+Each product recommendation card should display: product name, product image (scraped or
+API-pulled from fixderma.com), MRP and sale price (with applicable coupon code like
+FIX5/FIX10/FIX15 displayed), the 2–3 key active ingredients and what they do, a clear
+“How to Use” instruction in 2–3 steps (e.g., “Apply a pea-sized amount to affected areas
+twice daily after cleansing. Massage gently until absorbed.”), an expected results timeline
+(e.g., “You should notice visible improvement in 4–6 weeks with consistent daily use. Full
+results typically appear in 8–12 weeks.”), and a prominent “Buy Now” button that deep-links
+to the product page on fixderma.com.
+Step 5 — Routine Builder (Stretch Goal for V2): After showing individual products, offer
+an optional “Build My Complete Routine” view. This sequences the recommended products
+into a morning/evening skincare regimen. AM routine: Cleanser → Serum → Treatment →
+Sunscreen. PM routine: Cleanser → Serum → Treatment → Moisturizer. Display as a visual
+timeline with product thumbnails at each step. This increases average order value by
+encouraging multi-product purchases.
+Step 6 — Disclaimer (Non-Negotiable — must appear on every analysis screen): “This
+analysis is powered by AI and is intended for informational and skincare guidance purposes
+only. It is not a medical diagnosis and does not replace a consultation with a certified
+dermatologist. If your condition is persistent, worsening, or causing discomfort, please
+consult a healthcare professional.” For conditions that appear clinically significant (severe
+eczema, suspected psoriasis, potential vitiligo, anything that looks like it could be skin
+cancer), the system must elevate the disclaimer to a primary message and strongly
+recommend an in-person dermatologist visit before recommending any products.
+B4. TECHNICAL DIRECTION
+Vision AI Model: Use GPT-4o Vision API or Claude Vision API as the primary analysis
+engine. These multimodal models are excellent at skin condition classification when given
+
+precise prompts. The system prompt must instruct the model to output a structured JSON: {
+&quot;primary_condition&quot;: &quot;acanthosis_nigricans&quot;, &quot;confidence&quot;: 0.87,
+&quot;severity&quot;: &quot;moderate&quot;, &quot;secondary_conditions&quot;: [{&quot;condition&quot;: &quot;dry_skin&quot;,
+&quot;confidence&quot;: 0.45}], &quot;recommendation_ids&quot;: [&quot;nigrifix_cream_100g&quot;,
+&quot;nigrifix_roll_on&quot;] }. The recommendation_ids are looked up from our product
+database — the LLM does NOT generate product names freely.
+Alternative (cost-optimized): Fine-tune an open-source vision model (e.g., LLaVA, or a
+dermatology-specific model from Hugging Face like dermnet-classifier) for the classification
+step, and use a smaller LLM (GPT-4o-mini or Claude Haiku) for generating the explanation
+text. This reduces per-analysis API cost from ~$0.03–0.05 to under $0.01.
+Product Catalog Backend: Build a structured product database. Sources: scrape from
+fixderma.com or manually compile from their site. Schema per product: product_id (our
+internal ID), name, fixderma_url, image_url, mrp, sale_price, active_ingredients (array),
+skin_concerns_addressed (array of condition tags), how_to_use (text),
+expected_results_timeline (text), category, sub_category. Store in Supabase or Airtable
+(Airtable is easier for the client to update themselves via spreadsheet-like UI). This database
+is the single source of truth — the AI recommendation is only as good as this data. Build an
+admin interface for Fixderma’s team to add new products, update prices, and modify concern-
+to-product mappings without developer involvement.
+Recommendation Logic: Two-layer architecture. Layer 1: Vision AI classifies the skin
+condition. Layer 2: A deterministic rules engine maps condition → product_ids using the
+mapping table. The LLM’s classification output feeds into the rules engine. The rules engine
+queries the product database and returns the matched products. This ensures no hallucinated
+recommendations.
+Front-End: Build as a responsive PWA using Next.js or a Replit/Bolt-generated interface.
+Mobile-first design. Clean, clinical aesthetic — white background, Fixderma’s teal/green
+brand accents, clear typography, high-quality product images. Must load fast on Indian
+mobile networks. The camera interface should use the device’s native camera API for best
+quality.
+WhatsApp Integration (high-value second surface): Use the WhatsApp Business API via
+Gupshup (India-preferred) or Twilio. Flow: User sends a photo of their skin concern to the
+Fixderma WhatsApp business number. The bot acknowledges: “Analyzing your skin… this
+will take a moment.” Processes the image through the same vision AI pipeline. Replies with a
+structured message: condition identified, brief explanation, top 2–3 product recommendations
+with images and “Buy Now” links. This is extremely powerful because WhatsApp reach in
+India is universal — far beyond app downloads.
+Privacy &amp; Data Architecture: Skin images are highly sensitive personal data. The system
+must NOT store images on any server beyond the duration of the analysis session unless the
+user explicitly opts in (e.g., “Save my analysis to track progress over time”). If images are
+stored with consent, they must be encrypted at rest. Comply with Indian data protection
+regulations (DPDP Act 2023). Display a clear privacy policy before the first image capture.
+No images should be used for model training without explicit separate consent.
+B5. SUCCESS METRICS
+
+Analysis accuracy: target above 85% agreement with dermatologist review on the primary
+condition identified (validate with 100 test cases reviewed by a dermatologist). Add-to-cart
+conversion rate from the recommendation page: target above 20%. Average session depth:
+measure how many users read the full explanation, view all recommended products, and click
+“Buy Now.” Repeat usage: do users come back for different skin concerns or to track
+improvement over time — target 15%+ return rate within 30 days. Revenue attribution: track
+how much GMV on fixderma.com is driven by the AI tool (UTM parameter on all “Buy
+Now” links).
+B6. WATCH-OUTS &amp; RISK MITIGATION
+The AI must never “diagnose” — always frame output as “assessment,” “analysis,” or “our
+AI suggests.” For conditions that appear clinically significant or beyond cosmetic skincare
+(severe eczema, psoriasis, potential malignancy, deep ulceration), the system must refuse to
+recommend products and instead display only a dermatologist consultation advisory. The
+product mapping table must be maintained as Fixderma launches new products — this is an
+ongoing operational task. Build automated alerts if a product URL returns a 404 (product
+discontinued or renamed). Test the vision AI with diverse Indian skin tones — Fitzpatrick
+types III through VI dominate the Indian market. The model must perform equally well
+across all skin tones. Poor performance on darker skin tones is both an ethical failure and a
+business failure (Nigrifix’s core user base has darker skin in the affected areas).

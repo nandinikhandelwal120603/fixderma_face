@@ -298,10 +298,25 @@ export default function Home() {
                         <h4 className="font-bold text-lg text-slate-800 mb-2 leading-tight">{product.name}</h4>
                         <p className="text-sm text-slate-500 mb-4 line-clamp-2">{product.description}</p>
                         
+                        <div className="space-y-3 mb-4 flex-grow bg-slate-50 p-3 rounded-xl border border-slate-100">
+                          <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Key Actives</p>
+                            <p className="text-xs text-slate-700 font-medium">{product.ingredients?.join(', ') || 'Dermatologically Tested Actives'}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">How To Use</p>
+                            <p className="text-xs text-slate-700">{product.usage || 'As directed by a dermatologist.'}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Expected Results</p>
+                            <p className="text-xs text-slate-700">{product.expected_results_timeline || 'Visible improvement in 4-6 weeks with consistent use.'}</p>
+                          </div>
+                        </div>
+
                         <div className="mt-auto flex items-center justify-between">
                           <div className="font-bold text-xl text-slate-800">₹{product.price}</div>
                           <a 
-                            href={`${product.buy_link}?coupon=${results.coupon}`}
+                            href={`${product.buy_link}?coupon=${results.coupon}&utm_source=ai_clinic&utm_medium=web_widget&utm_campaign=ai_recommendation`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 bg-slate-900 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition"

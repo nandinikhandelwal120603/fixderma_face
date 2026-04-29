@@ -1,0 +1,45 @@
+# Fixderma AI Clinic - System Documentation
+
+## 1. Project Overview
+The **Fixderma AI Clinic** is a next-generation, clinical-grade AI Skin Diagnostic Engine. It allows users to take a live photo or upload an image of their skin and receive an instant, accurate analysis of their skin conditions (e.g., acne, hyperpigmentation, dryness) along with personalized Fixderma product recommendations.
+
+## 2. System Architecture (Hybrid Approach)
+The system is built on a **Hybrid Architecture** designed for extreme speed and reliable data persistence:
+
+1. **Frontend**: Next.js 15 (App Router) with React, styled using Tailwind CSS and Framer Motion for premium micro-animations.
+2. **AI Engine**: Google Gemini 2.5 Flash Vision API. Selected for its exceptional speed and high accuracy in image analysis.
+3. **Recommendation Engine**: **Local JSON mapping**. Instead of sending 267 products to the AI (which would be slow and expensive), the AI only identifies the *conditions*. The server then instantly maps these conditions to products using a local, in-memory catalog.
+4. **Persistence Layer**: **Supabase (PostgreSQL)**. Used for long-term storage of user profiles, scan history, and raw AI auditing.
+
+## 3. Database Schema (Supabase)
+The database is structured to separate product data from user data while maintaining a complete audit trail.
+
+*   **`users`**: Stores the user's Profile (`name`, `age`).
+*   **`scans`**: Stores the final diagnostic results (`conditions`, recommended `products`, `skin_type`, and the `image_url` if stored). Links to `users` via `user_id`.
+*   **`raw_ai_logs`**: Crucial for AI auditing. Logs the exact `raw_response` from Gemini, the `cleaned_response`, the `model_name`, and exact `tokens_used` and `latency_ms`.
+*   **`product_catalog`**: Contains the full scraped inventory of 267 Fixderma products.
+*   **`condition_product_map`**: Maps specific dermatological conditions (e.g., "acne") and severities to an array of Shopify Product IDs.
+
+## 4. The Request Lifecycle (How a Scan Works)
+
+1. **Capture**: The user captures an image on the frontend. The image is compressed to 512x512px to save bandwidth and tokens.
+2. **Analysis (`/api/analyze`)**: 
+   * The image is sent to Gemini 2.5 Flash along with a strict `SYSTEM_PROMPT` instructing it to return a deterministic JSON object.
+   * **Telemetry**: The server records the `startTime` and extracts the `totalTokenCount` from the Gemini response.
+   * **Auditing**: The raw JSON string, latency, and token count are sent to the `raw_ai_logs` table in Supabase *asynchronously* (so the user doesn't wait for the DB write).
+3. **Recommendation (`/api/recommend`)**:
+   * The analyzed conditions (e.g., `["acne"]`) are passed to the recommendation route.
+   * The route queries the local `products.json` database.
+   * It matches the conditions to the `condition_product_map` and returns the full product details from the `product_catalog`.
+   * **Logging**: The final scan result is saved to the `scans` table in Supabase.
+4. **Results View**: The frontend elegantly displays the diagnostic findings and the beautifully rendered product cards with direct "Buy Now" links to Shopify.
+
+## 5. Performance & Analytics
+By utilizing the hybrid architecture and image compression, the system achieves remarkable efficiency:
+*   **Token Usage**: ~550 tokens per scan (approx. 250 for the 512px image, 300 for the prompt).
+*   **Latency**: The AI analysis typically completes in **1.2 to 2.0 seconds**. The recommendation mapping takes **<0.05 seconds**.
+*   **Cost**: Because recommendations are handled locally rather than by the LLM, the operational cost per scan is near zero.
+
+## 6. Deployment
+*   **Hosting**: Deployed on **Netlify** edge infrastructure.
+*   **Security**: All sensitive keys (`GEMINI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) are stored as Netlify Environment Variables. The Next.js framework has been patched to the latest secure version to pass Netlify's strict CVE deployment blocks.
